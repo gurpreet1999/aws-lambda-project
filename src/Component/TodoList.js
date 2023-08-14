@@ -38,7 +38,11 @@ const TodoList = () => {
     const {data}=await axios.delete("https://ub7borqbe2.execute-api.ap-south-1.amazonaws.com/dev/users/",{
       data:idd
     })
-console.log(data)
+
+const dataTobeKept=taskList.filter((item)=>item.id!==data.Item.Attributes.id)
+
+setTaskList(dataTobeKept)
+
 
     }
 
@@ -55,6 +59,26 @@ const updatedData={
 
 const {data}=await axios.put("https://ub7borqbe2.execute-api.ap-south-1.amazonaws.com/dev/users/",updatedData)
 console.log(data)
+
+setTaskList((prev)=>{
+  return prev.map((item)=>{
+    if(item.id===obj.id){
+      return {
+        ...item,
+        taskName:data.Item.Attributes.taskName,
+        
+        description:data.Item.Attributes.description
+        
+      }
+    }else{
+      return item
+    }
+
+  })
+})
+
+
+
     }
 
 const createTask=async(id,taskName,description)=>{
